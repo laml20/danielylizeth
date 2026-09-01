@@ -44,7 +44,7 @@
     });
   }
 
-  function openInvitation() {
+  function openInvitation(skipPush) {
     if (opened) return;
     opened = true;
 
@@ -52,7 +52,11 @@
     envelopeScreen.classList.add('is-hidden');
     document.body.style.overflow = '';
 
-    try { history.pushState({ invite: true }, '', '#invitacion'); } catch (e) {}
+    // skipPush: the URL is already at #invitacion (deep link / refresh /
+    // history nav), so don't stack another identical history entry.
+    if (!skipPush) {
+      try { history.pushState({ invite: true }, '', '#invitacion'); } catch (e) {}
+    }
 
     headerControls.hidden = false;
     startCountdown();
@@ -66,20 +70,22 @@
     try { history.scrollRestoration = 'manual'; } catch (e) {}
   }
   window.scrollTo(0, 0);
+  document.body.style.overflow = 'hidden';
+
+  // Deep link: arriving at index.html#invitacion (e.g. the "back to the
+  // invitation" link on the story page) opens straight to the invitation
+  // view instead of the envelope landing.
   if (window.location.hash === '#invitacion') {
-    try {
-      history.replaceState(null, '', window.location.pathname + window.location.search);
-    } catch (e) {}
+    openInvitation(true);
   }
 
-  document.body.style.overflow = 'hidden';
   envelopeBtn.addEventListener('click', function () {
     document.body.style.overflow = '';
     openInvitation();
   });
 
   window.addEventListener('popstate', function () {
-    if (!opened) openInvitation();
+    if (!opened) openInvitation(true);
   });
 
   /* ---------------- Hard pull at the top/bottom → back to landing ---------------- */
@@ -120,8 +126,9 @@
   // Some browsers (notably iOS Safari) restore the exact in-memory page
   // state on refresh instead of re-running this script, which would leave
   // a reload sitting on the invitation screen instead of the envelope.
+  // Skip the reset when the URL explicitly asks for the invitation view.
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted) returnToLanding();
+    if (e.persisted && window.location.hash !== '#invitacion') returnToLanding();
   });
 
   function isAtTop() { return window.scrollY <= 0; }
