@@ -41,7 +41,7 @@
       cenaTBA: 'Por anunciarse',
 
       vestimentaHeading: 'Vestimenta',
-      vestimentaBody: 'Los invitamos a vestir tonos de verde, café, vino, rosa o crema, o colores similares, el día de nuestra boda.',
+      vestimentaBody: 'Los invitamos a vestir tonos de verde, café, vino o rosa, o colores similares, el día de nuestra boda.',
 
       rsvpHeading: 'Confirma tu Asistencia',
       rsvpBody: '¡Nos encantaría contar con su presencia en este día tan especial para nosotros! Les agradecemos confirmar su asistencia lo más pronto posible para poder reservar su asiento. En caso de no poder acompañarnos, les agradecemos también nos lo hagan saber con anticipación.',
@@ -113,7 +113,7 @@
       cenaTBA: 'To be announced',
 
       vestimentaHeading: 'Attire',
-      vestimentaBody: 'We invite you to wear shades of brown, green, burgundy, pink, cream, or similar on the day of the wedding.',
+      vestimentaBody: 'We invite you to wear shades of brown, green, burgundy, pink, or similar on the day of the wedding.',
 
       rsvpHeading: 'RSVP',
       rsvpBody: "We hope you can join us on this big day in our lives! Please confirm to secure your seat, or if you know you can't attend, please let us know as soon as possible.",
