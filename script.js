@@ -7,7 +7,7 @@
   // Google Apps Script Web App URL (…/exec) that appends a row to your
   // spreadsheet. While this is empty the form falls back to opening a
   // pre-filled email to RSVP_EMAIL.
-  var RSVP_ENDPOINT = '';
+  var RSVP_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzW-ACbqM9Ft1zdTFr9Qsrwb9rXeZfyk1nVR9EG9N6Fs5w5zVQwBukaMcRMrQQSoAKh_w/exec';
   // Ceremony start, anchored to Los Angeles time (PDT, UTC-7 in September) so
   // every guest sees the same countdown regardless of their own timezone.
   var WEDDING_START = new Date('2026-09-19T13:00:00-07:00');
@@ -56,6 +56,20 @@
 
     headerControls.hidden = false;
     startCountdown();
+  }
+
+  // On a fresh load — including a refresh made while the invitation was open —
+  // start at the top on the envelope screen. Otherwise the browser can restore
+  // a large scroll offset into the now-hidden invitation screen while body
+  // scrolling is locked, leaving a blank, unscrollable page.
+  if ('scrollRestoration' in history) {
+    try { history.scrollRestoration = 'manual'; } catch (e) {}
+  }
+  window.scrollTo(0, 0);
+  if (window.location.hash === '#invitacion') {
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch (e) {}
   }
 
   document.body.style.overflow = 'hidden';
@@ -111,39 +125,31 @@
   });
 
   function isAtTop() { return window.scrollY <= 0; }
-  function isAtBottom() {
-    return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
-  }
 
+  // Pulling past the very top of the page (not the bottom) closes back to the
+  // envelope — but only on a deliberate, long pull, not an ordinary fast
+  // scroll/flick that happens to register a big single delta or distance.
   var pullAccum = 0;
   window.addEventListener('wheel', function (e) {
     if (!opened) return;
     if (isAtTop() && e.deltaY < 0) {
       pullAccum += -e.deltaY;
-    } else if (isAtBottom() && e.deltaY > 0) {
-      pullAccum += e.deltaY;
     } else {
       pullAccum = 0;
       return;
     }
-    if (pullAccum > 260) { pullAccum = 0; returnToLanding(); }
+    if (pullAccum > 420) { pullAccum = 0; returnToLanding(); }
   }, { passive: true });
 
   var pullTouchStart = null;
   window.addEventListener('touchstart', function (e) {
-    if (isAtTop() || isAtBottom()) {
-      pullTouchStart = { y: e.touches[0].clientY, atTop: isAtTop() };
-    } else {
-      pullTouchStart = null;
-    }
+    pullTouchStart = isAtTop() ? { y: e.touches[0].clientY } : null;
   }, { passive: true });
   window.addEventListener('touchmove', function (e) {
     if (!opened || pullTouchStart === null) return;
+    if (!isAtTop()) { pullTouchStart = null; return; }
     var dy = e.touches[0].clientY - pullTouchStart.y;
-    if (pullTouchStart.atTop && isAtTop() && dy > 150) {
-      pullTouchStart = null;
-      returnToLanding();
-    } else if (!pullTouchStart.atTop && isAtBottom() && dy < -150) {
+    if (dy > 220) {
       pullTouchStart = null;
       returnToLanding();
     }
@@ -329,7 +335,11 @@
       payload.append('lang', curLang);
       payload.append('submittedAt', new Date().toISOString());
 
-      fetch(RSVP_ENDPOINT, { method: 'POST', body: payload })
+      // no-cors: Apps Script Web Apps don't sensd CORS headers on the final
+      // (redirected) response, so a normal fetch would reject even though the
+      // row was written. The response is opaque and unreadable, which is fine
+      // here — we only need to know the POST left the browser.
+      fetch(RSVP_ENDPOINT, { method: 'POST', body: payload, mode: 'no-cors' })
         .then(function () { showSuccess(); })
         .catch(function () { showError(); });
     } else {

@@ -285,10 +285,12 @@ h1, h2, p { margin: 0; }
 }
 
 #invitation-screen {
+  display: none;
   visibility: hidden;
   opacity: 0;
 }
 #invitation-screen.is-open {
+  display: block;
   visibility: visible;
   animation: invitation-fade-in 600ms ease both;
 }
@@ -394,7 +396,7 @@ h1, h2, p { margin: 0; }
 }
 .hero__card-names {
   font-family: var(--font-script);
-  font-size: clamp(15px, 5vw, 21px);
+  font-size: clamp(23px, 5vw, 21px);
   color: var(--gold-700);
   line-height: 1.15;
   margin-bottom: 6%;
@@ -812,11 +814,74 @@ h1, h2, p { margin: 0; }
 }
 .modal__success p { color: var(--ink-600); font-size: 16px; }
 
+/* ===================== Our Story links ===================== */
+.story-link,
+.story-page__back {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--ink-600);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(28, 28, 28, 0.35);
+  padding-bottom: 1px;
+  transition: color 200ms var(--ease-soft), border-color 200ms var(--ease-soft);
+}
+.story-link { margin-top: 22px; }
+.story-page__back { margin-top: 56px; }
+/* Beat the `#invitation-screen a { color:#0e0e0e }` rule for the invitation link. */
+#invitation-screen .story-link { color: var(--ink-600); }
+#invitation-screen .story-link:hover,
+.story-page__back:hover { color: var(--green-700); border-color: var(--green-700); }
+.story-link:focus-visible,
+.story-page__back:focus-visible { outline: 2px solid var(--gold-600); outline-offset: 3px; }
+
+/* The hero + closing photos on the invitation also link to the story page.
+   .hero__photo now sits on the <a>; the closing <a> is just a wrapper and the
+   sizing stays on its inner .closing-photo <img>. */
+.story-photo-link { display: block; line-height: 0; text-decoration: none; }
+.hero__photo.story-photo-link img { width: 100%; display: block; }
+.story-photo-link:focus-visible { outline: 2px solid var(--gold-600); outline-offset: 4px; }
+
+/* ===================== Our Story page (historia.html) ===================== */
+.story-page {
+  max-width: 620px;
+  margin-inline: auto;
+  padding: 104px 32px 96px;
+  text-align: center;
+}
+.story-page__heading {
+  font-family: var(--font-script);
+  font-size: clamp(42px, 13vw, 60px);
+  line-height: 1.1;
+  color: var(--green-700);
+  text-shadow: var(--press);
+  margin-bottom: 4px;
+}
+.story-page__divider { display: flex; justify-content: center; padding: 24px 0 4px; }
+.story-page__divider img { width: 140px; height: auto; }
+.story-page__photo {
+  width: min(65%, 360px);
+  height: auto;
+  margin: 50px auto;
+}
+.story-page p {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--ink-600);
+  max-width: 520px;
+  margin: 20px auto 0;
+  text-align: center;
+}
+
 /* ===================== Desktop ===================== */
 @media (min-width: 900px) {
   #invitation-screen { max-width: 920px; margin-inline: auto; }
   .header-controls { justify-content: flex-start; padding: 24px calc((100vw - 920px) / 2 + 24px); }
   @media (max-width: 967px) { .header-controls { padding: 24px; } }
+  body.story-page-body .header-controls { padding: 24px; }
 
   .hero__art { max-width: 400px; }
   .eyebrow { font-size: 14px; }

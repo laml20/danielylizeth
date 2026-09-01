@@ -50,6 +50,15 @@
       closingBody: 'Gracias por acompañarnos y por ser parte de este momento tan importante de nuestras vidas.',
       closingSignoff: 'Con mucho cariño,',
 
+      // Our Story
+      storyLink: 'Nuestra Historia →',
+      storyLinkAria: 'Ver nuestra historia',
+      storyHeading: 'Nuestra Historia',
+      storyBackLink: '← Volver a la Invitación',
+      storyPara1: 'Al comienzo de nuestro segundo año de universidad, los dos asistimos por primera vez a un evento de la Sociedad de Ingenieros Hispanos Profesionales (SHPE). Después de reconocernos de la clase de historia Mexicana que habíamos tenido más temprano ese día, empezamos a platicar y terminamos caminando juntos desde el campus hasta la refresquería en Rice Village. Despues de allí, empezamos a almorzar juntos despues de clase, y nos fuimos conociendo más. Salimos a cenar algunas veces en Rice Village y comenzamos oficialmente nuestra relación en un picnic en Hermann Park.',
+      storyPara2: 'Seguimos involucrados en SHPE durante el resto de la carrera, y en nuestro último año llegamos a ser presidenta (Lizeth) y tesorero (Daniel). Nos graduamos en mayo de 2025 y, después de la universidad, pasamos un año a más de mil quinientos kilómetros de distancia: Daniel regresó a casa en Los Ángeles y Lizeth se mudó a Seattle por el trabajo.',
+      storyPara3: 'Después de tantas llamadas por FaceTime, citas virtuales y viajes entre Seattle y Los Ángeles, Daniel le pidió matrimonio a Lizeth en el Parque Nacional Joshua Tree, y Lizeth dijo que sí. Después de casarnos, viviremos en Seattle, donde Lizeth seguirá trabajando como ingeniera de software y Daniel estudiará una maestría en ingeniería mecánica en la Universidad de Washington.',
+
       langAria: 'Idioma',
 
       modalHeading: 'Confirmar Asistencia',
@@ -113,6 +122,15 @@
       closingBody: 'Thank you for joining us and being part of this important moment in our lives.',
       closingSignoff: 'With much love,',
 
+      // Our Story
+      storyLink: 'Our Story →',
+      storyLinkAria: 'See our story',
+      storyHeading: 'Our Story',
+      storyBackLink: '← Back to the Invitation',
+      storyPara1: 'At the beginning of our sophomore year, we both went to a Society of Hispanic Professional Engineers (SHPE) event for the first time. We recognized each other from the Mexican history class we had had earlier that day, started talking, and ended up walking all the way from campus to the refresquería in Rice Village together. We started getting lunch together regularly after class and got to know each other better over time. We went out for dinner a couple of times in Rice Village, and we officially began our relationship on a picnic in Hermann Park.',
+      storyPara2: 'We stayed involved in SHPE throughout college, eventually serving as president (Lizeth) and treasurer (Daniel) during our senior year. We both graduated in May 2025, and afterward we spent a year more than a thousand miles apart — Daniel moved back home to Los Angeles, and Lizeth moved to Seattle for work.',
+      storyPara3: 'After countless FaceTime calls, virtual dates, and trips between Seattle and Los Angeles, Daniel proposed to Lizeth in Joshua Tree National Park, and Lizeth said yes. After the wedding, we will live in Seattle, where Lizeth will keep working as a software engineer and Daniel will pursue a master’s in mechanical engineering at the University of Washington.',
+
       langAria: 'Language',
 
       modalHeading: 'Confirm Attendance',
@@ -136,12 +154,15 @@
   };
 
   function detectDefaultLang() {
+    // Always open in Spanish. Only honor a saved language if this visitor
+    // has explicitly used the Es/En toggle before; browser locale is ignored.
     try {
-      var stored = localStorage.getItem(STORAGE_KEY);
-      if (stored && translations[stored]) return stored;
+      if (localStorage.getItem(STORAGE_TOGGLED_KEY) === '1') {
+        var stored = localStorage.getItem(STORAGE_KEY);
+        if (stored && translations[stored]) return stored;
+      }
     } catch (e) {}
-    var nav = (navigator.language || 'es').toLowerCase();
-    return nav.indexOf('en') === 0 ? 'en' : 'es';
+    return 'es';
   }
 
   function translate(key, lang) {
