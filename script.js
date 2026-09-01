@@ -72,9 +72,26 @@
   window.scrollTo(0, 0);
   document.body.style.overflow = 'hidden';
 
-  // Deep link: arriving at index.html#invitacion (e.g. the "back to the
-  // invitation" link on the story page) opens straight to the invitation
-  // view instead of the envelope landing.
+  function isReload() {
+    try {
+      var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      if (nav) return nav.type === 'reload';
+    } catch (e) {}
+    return !!(performance.navigation && performance.navigation.type === 1);
+  }
+
+  // A refresh always returns to the envelope landing screen: if the page was
+  // reloaded while sitting at #invitacion, drop that hash so the deep-link
+  // check below doesn't re-open the invitation.
+  if (isReload() && window.location.hash === '#invitacion') {
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch (e) {}
+  }
+
+  // Deep link: arriving at index.html#invitacion by a real navigation (the
+  // "back to the invitation" link on the story page, a bookmark, back/forward)
+  // opens straight to the invitation view instead of the envelope landing.
   if (window.location.hash === '#invitacion') {
     openInvitation(true);
   }
@@ -126,9 +143,8 @@
   // Some browsers (notably iOS Safari) restore the exact in-memory page
   // state on refresh instead of re-running this script, which would leave
   // a reload sitting on the invitation screen instead of the envelope.
-  // Skip the reset when the URL explicitly asks for the invitation view.
   window.addEventListener('pageshow', function (e) {
-    if (e.persisted && window.location.hash !== '#invitacion') returnToLanding();
+    if (e.persisted) returnToLanding();
   });
 
   function isAtTop() { return window.scrollY <= 0; }

@@ -336,14 +336,14 @@ h1, h2, p { margin: 0; }
   position: absolute;
   width: 74%;
   top: -11%;
-  right: -7%;
+  right: -4%;
   z-index: 2;
   pointer-events: none;
 }
 .hero__flower {
   position: absolute;
   width: 40%;
-  bottom: 2%;
+  bottom: -2%;
   left: -9%;
   z-index: 5;
   pointer-events: none;
@@ -359,7 +359,7 @@ h1, h2, p { margin: 0; }
 .hero__photo {
   position: absolute;
   width: 54%;
-  top: 8%;
+  top: 14%;
   left: 3%;
   z-index: 3;
   transform: rotate(-7deg);
@@ -368,7 +368,7 @@ h1, h2, p { margin: 0; }
 .hero__card {
   position: absolute;
   width: 62%;
-  top: 27%;
+  top: 30%;
   right: -6%;
   z-index: 4;
   transform: rotate(6deg);
