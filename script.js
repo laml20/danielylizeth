@@ -89,13 +89,6 @@
     } catch (e) {}
   }
 
-  // Deep link: arriving at index.html#invitacion by a real navigation (the
-  // "back to the invitation" link on the story page, a bookmark, back/forward)
-  // opens straight to the invitation view instead of the envelope landing.
-  if (window.location.hash === '#invitacion') {
-    openInvitation(true);
-  }
-
   envelopeBtn.addEventListener('click', function () {
     document.body.style.overflow = '';
     openInvitation();
@@ -388,4 +381,12 @@
       showSuccess();
     }
   });
+
+  // Deep link: arriving at index.html#invitacion by a real navigation (the
+  // "back to the invitation" link on the story page, a bookmark, back/forward)
+  // opens straight to the invitation view instead of the envelope landing.
+  // Runs last so startCountdown() sees the fully-initialised countdown refs.
+  if (window.location.hash === '#invitacion') {
+    openInvitation(true);
+  }
 })();

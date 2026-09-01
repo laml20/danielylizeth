@@ -90,6 +90,10 @@
   --font-serif:  'Sorts Mill Goudy', 'Alegreya', Georgia, serif;
   --font-caps:   'Alegreya SC', Georgia, serif;
 
+  /* Anastasia Script's capitals carry a swash on the left, so centered lines
+     read slightly right-of-centre. Nudge script headings back left. */
+  --script-optical-shift: -0.08em;
+
   --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   /* Debossed / letterpress-on-paper text effect */
@@ -400,6 +404,7 @@ h1, h2, p { margin: 0; }
   color: var(--gold-700);
   line-height: 1.15;
   margin-bottom: 6%;
+  transform: translateX(var(--script-optical-shift));
 }
 .hero__card-date {
   font-size: clamp(8.5px, 2.7vw, 12px);
@@ -525,6 +530,7 @@ h1, h2, p { margin: 0; }
   font-size: clamp(40px, 12vw, 56px);
   color: var(--green-700);
   margin-bottom: 8px;
+  transform: translateX(var(--script-optical-shift));
 }
 
 /* ===================== Dividers ===================== */
@@ -811,6 +817,7 @@ h1, h2, p { margin: 0; }
   font-size: 40px;
   color: var(--green-700);
   margin-bottom: 8px;
+  transform: translateX(var(--script-optical-shift));
 }
 .modal__success p { color: var(--ink-600); font-size: 16px; }
 
@@ -858,6 +865,7 @@ h1, h2, p { margin: 0; }
   color: var(--green-700);
   text-shadow: var(--press);
   margin-bottom: 4px;
+  transform: translateX(var(--script-optical-shift));
 }
 .story-page__divider { display: flex; justify-content: center; padding: 24px 0 4px; }
 .story-page__divider img { width: 140px; height: auto; }
