@@ -20,8 +20,8 @@
       countdownToday: '¡Hoy es el día!',
       countdownPast: 'Gracias por celebrar con nosotros',
 
-      verseQuote: '“Coloca aquí tu versículo bíblico”',
-      verseRef: '— Referencia',
+      verseQuote: '“Por eso el hombre deja a su padre y a su madre para unirse a su mujer, y pasan a ser una sola carne.”',
+      verseRef: 'Genesis 2:24',
 
       blessingIntro: 'Con la bendición de Dios y de nuestros padres,',
       parents1: 'Efren Plascencia Reyes y Maricela Segura Picazo',
@@ -41,10 +41,10 @@
       cenaTBA: 'Por anunciarse',
 
       vestimentaHeading: 'Vestimenta',
-      vestimentaBody: 'Los invitamos a usar los colores café, verde, vino, rosa, crema, o similares el día de la boda.',
+      vestimentaBody: 'Los invitamos a vestir tonos de verde, café, vino, rosa o crema, o colores similares, el día de nuestra boda.',
 
-      rsvpHeading: 'Reservación',
-      rsvpBody: 'Esperamos que nos puedan acompañar en este día tan grande en nuestras vidas. Por favor confirmen para asegurar su asiento, o si saben que no podrán asistir, por favor déjenos saber lo más antes posible.',
+      rsvpHeading: 'Confirma tu Asistencia',
+      rsvpBody: '¡Nos encantaría contar con su presencia en este día tan especial para nosotros! Les agradecemos confirmar su asistencia lo más pronto posible para poder reservar su asiento. En caso de no poder acompañarnos, les agradecemos también nos lo hagan saber con anticipación.',
       rsvpButton: 'Confirmar Asistencia',
 
       closingBody: 'Gracias por acompañarnos y por ser parte de este momento tan importante de nuestras vidas.',
@@ -59,11 +59,11 @@
       labelAttending: '¿Podrás acompañarnos?',
       optionYes: 'Sí, ahí estaré',
       optionNo: 'No podré asistir',
-      labelGuests: 'Número de acompañantes (incluyéndote)',
+      labelAdults: 'Adultos',
+      labelChildren: 'Niños',
       labelMessage: 'Mensaje para los novios (opcional)',
       placeholderMessage: 'Escribe un mensaje...',
       submitButton: 'Enviar Confirmación',
-      requiredNote: 'Tu confirmación se envía directamente a los novios.',
       sendingButton: 'Enviando…',
       errorBody: 'No pudimos enviar tu confirmación. Revisa tu conexión e inténtalo de nuevo.',
 
@@ -83,8 +83,8 @@
       countdownToday: "Today's the day!",
       countdownPast: 'Thank you for celebrating with us',
 
-      verseQuote: '"Place your Bible verse here"',
-      verseRef: '— Reference',
+      verseQuote: '"That is why a man leaves his father and mother and clings to his wife, and the two of them become one body."',
+      verseRef: 'Genesis 2:24',
 
       blessingIntro: 'With the blessing of God and our parents,',
       parents1: 'Efren Plascencia Reyes and Maricela Segura Picazo',
@@ -104,10 +104,10 @@
       cenaTBA: 'To be announced',
 
       vestimentaHeading: 'Attire',
-      vestimentaBody: 'We invite you to wear shades of brown, green, wine, pink, cream, or similar on the day of the wedding.',
+      vestimentaBody: 'We invite you to wear shades of brown, green, burgundy, pink, cream, or similar on the day of the wedding.',
 
       rsvpHeading: 'RSVP',
-      rsvpBody: "We hope you can join us on this big day in our lives. Please confirm to secure your seat, or if you know you can't attend, please let us know as soon as possible.",
+      rsvpBody: "We hope you can join us on this big day in our lives! Please confirm to secure your seat, or if you know you can't attend, please let us know as soon as possible.",
       rsvpButton: 'Confirm Attendance',
 
       closingBody: 'Thank you for joining us and being part of this important moment in our lives.',
@@ -122,11 +122,11 @@
       labelAttending: 'Will you be able to join us?',
       optionYes: "Yes, I'll be there",
       optionNo: "I won't be able to attend",
-      labelGuests: 'Number of guests (including you)',
+      labelAdults: 'Adults',
+      labelChildren: 'Children',
       labelMessage: 'Message for the couple (optional)',
       placeholderMessage: 'Write a message...',
       submitButton: 'Send RSVP',
-      requiredNote: 'Your RSVP is sent straight to the couple.',
       sendingButton: 'Sending…',
       errorBody: "We couldn't send your RSVP. Check your connection and try again.",
 

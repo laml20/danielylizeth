@@ -23,7 +23,7 @@
     });
   });
 
-  /* ---------------- Envelope open + sparkle/wipe transition ---------------- */
+  /* ---------------- Envelope open ---------------- */
   var envelopeScreen = document.getElementById('envelope-screen');
   var invitationScreen = document.getElementById('invitation-screen');
   var envelopeBtn = document.getElementById('envelope-btn');
@@ -31,67 +31,31 @@
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var opened = false;
 
-  // The wax seal is baked into envelope.png, not a separate element — its
-  // center sits at roughly (51%, 53%) of the envelope image itself.
-  function originFromSeal() {
-    var rect = envelopeBtn.getBoundingClientRect();
-    var x = ((rect.left + rect.width * 0.51) / window.innerWidth) * 100;
-    var y = ((rect.top + rect.height * 0.53) / window.innerHeight) * 100;
-    return { x: x + '%', y: y + '%' };
-  }
-
   if (!reduceMotion) {
-    setTimeout(function () {
-      if (!opened) envelopeBtn.classList.add('shimmy');
-    }, 2000);
-  }
-
-  function spawnSparkles(origin) {
-    var layer = document.createElement('div');
-    layer.className = 'sparkle-layer';
-    var count = reduceMotion ? 0 : 32;
-    for (var i = 0; i < count; i++) {
-      var s = document.createElement('span');
-      s.className = 'sparkle';
-      s.style.setProperty('--ox', origin.x);
-      s.style.setProperty('--oy', origin.y);
-      s.style.setProperty('--angle', Math.round(Math.random() * 360) + 'deg');
-      s.style.setProperty('--dist', (30 + Math.random() * 40) + 'vmax');
-      s.style.setProperty('--delay', Math.round(Math.random() * 300) + 'ms');
-      layer.appendChild(s);
-    }
-    document.body.appendChild(layer);
-    setTimeout(function () { layer.remove(); }, 1700);
+    var shimmyInterval = setInterval(function () {
+      if (opened) {
+        clearInterval(shimmyInterval);
+        return;
+      }
+      envelopeBtn.classList.add('shimmy');
+    }, 4500);
+    envelopeBtn.addEventListener('animationend', function (e) {
+      if (e.animationName === 'shimmy') envelopeBtn.classList.remove('shimmy');
+    });
   }
 
   function openInvitation() {
     if (opened) return;
     opened = true;
 
-    var origin = originFromSeal();
-    invitationScreen.style.setProperty('--ox', origin.x);
-    invitationScreen.style.setProperty('--oy', origin.y);
-
-    envelopeBtn.classList.add('is-pressed');
-    spawnSparkles(origin);
-
     invitationScreen.classList.add('is-open');
-    // Force layout so the clip-path starts at 0% before animating.
-    void invitationScreen.offsetWidth;
-    invitationScreen.classList.add('is-wiping');
-
-    envelopeScreen.classList.add('is-leaving');
+    envelopeScreen.classList.add('is-hidden');
+    document.body.style.overflow = '';
 
     try { history.pushState({ invite: true }, '', '#invitacion'); } catch (e) {}
 
     headerControls.hidden = false;
-
-    setTimeout(function () {
-      envelopeScreen.classList.add('is-hidden');
-      document.body.style.overflow = '';
-      startCountdown();
-      initScrollReveal();
-    }, reduceMotion ? 420 : 1150);
+    startCountdown();
   }
 
   document.body.style.overflow = 'hidden';
@@ -104,31 +68,82 @@
     if (!opened) openInvitation();
   });
 
-  /* ---------------- Hard pull / scroll up at the top → back to landing ---------------- */
+  /* ---------------- Hard pull at the top/bottom → back to landing ---------------- */
+  // Resets in place (no reload) so it works the same regardless of how a
+  // given browser handles reload/back-forward-cache behavior.
   function returnToLanding() {
     if (!opened) return;
-    // Reload without the hash so the envelope screen shows fresh.
-    window.location.replace(window.location.pathname + window.location.search);
+    opened = false;
+
+    invitationScreen.classList.remove('is-open');
+    envelopeScreen.classList.remove('is-hidden');
+    envelopeBtn.classList.remove('is-pressed');
+    headerControls.hidden = true;
+    document.body.style.overflow = 'hidden';
+    window.scrollTo(0, 0);
+
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    } catch (e) {}
+
+    if (countdownTimer) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+
+    if (!reduceMotion) {
+      clearInterval(shimmyInterval);
+      shimmyInterval = setInterval(function () {
+        if (opened) {
+          clearInterval(shimmyInterval);
+          return;
+        }
+        envelopeBtn.classList.add('shimmy');
+      }, 4500);
+    }
+  }
+
+  // Some browsers (notably iOS Safari) restore the exact in-memory page
+  // state on refresh instead of re-running this script, which would leave
+  // a reload sitting on the invitation screen instead of the envelope.
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) returnToLanding();
+  });
+
+  function isAtTop() { return window.scrollY <= 0; }
+  function isAtBottom() {
+    return window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
   }
 
   var pullAccum = 0;
   window.addEventListener('wheel', function (e) {
     if (!opened) return;
-    if (window.scrollY <= 0 && e.deltaY < 0) {
+    if (isAtTop() && e.deltaY < 0) {
       pullAccum += -e.deltaY;
-      if (pullAccum > 260) { pullAccum = 0; returnToLanding(); }
+    } else if (isAtBottom() && e.deltaY > 0) {
+      pullAccum += e.deltaY;
     } else {
       pullAccum = 0;
+      return;
     }
+    if (pullAccum > 260) { pullAccum = 0; returnToLanding(); }
   }, { passive: true });
 
   var pullTouchStart = null;
   window.addEventListener('touchstart', function (e) {
-    pullTouchStart = window.scrollY <= 0 ? e.touches[0].clientY : null;
+    if (isAtTop() || isAtBottom()) {
+      pullTouchStart = { y: e.touches[0].clientY, atTop: isAtTop() };
+    } else {
+      pullTouchStart = null;
+    }
   }, { passive: true });
   window.addEventListener('touchmove', function (e) {
     if (!opened || pullTouchStart === null) return;
-    if (window.scrollY <= 0 && e.touches[0].clientY - pullTouchStart > 150) {
+    var dy = e.touches[0].clientY - pullTouchStart.y;
+    if (pullTouchStart.atTop && isAtTop() && dy > 150) {
+      pullTouchStart = null;
+      returnToLanding();
+    } else if (!pullTouchStart.atTop && isAtBottom() && dy < -150) {
       pullTouchStart = null;
       returnToLanding();
     }
@@ -185,24 +200,6 @@
     countdownTimer = setInterval(tick, 1000);
   }
 
-  /* ---------------- Scroll reveal ---------------- */
-  function initScrollReveal() {
-    var els = document.querySelectorAll('.reveal');
-    if (!('IntersectionObserver' in window)) {
-      els.forEach(function (el) { el.classList.add('is-visible'); });
-      return;
-    }
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-    els.forEach(function (el) { observer.observe(el); });
-  }
-
   /* ---------------- RSVP modal ---------------- */
   var modal = document.getElementById('rsvp-modal');
   var openBtn = document.getElementById('rsvp-open-btn');
@@ -236,7 +233,8 @@
       var subBtn = form.querySelector('.modal__primary-btn');
       subBtn.disabled = false;
       subBtn.textContent = window.i18n.translate('submitButton', document.documentElement.lang);
-      setGuests(1);
+      setAdults(1);
+      setChildren(0);
     }, 300);
   }
 
@@ -256,27 +254,34 @@
     });
   });
 
-  /* ----- Guest count stepper ----- */
-  var guestsInput = document.getElementById('rsvp-guests');
-  var guestsMinus = document.getElementById('rsvp-guests-minus');
-  var guestsPlus = document.getElementById('rsvp-guests-plus');
-  var GUESTS_MIN = 1;
-  var GUESTS_MAX = 10;
+  /* ----- Guest count steppers (adults + children) ----- */
+  var STEPPER_MAX = 10;
 
-  function clampGuests(n) {
-    n = parseInt(n, 10);
-    if (isNaN(n)) n = GUESTS_MIN;
-    return Math.min(GUESTS_MAX, Math.max(GUESTS_MIN, n));
+  function makeStepper(prefix, min) {
+    var input = document.getElementById('rsvp-' + prefix);
+    var minusBtn = document.getElementById('rsvp-' + prefix + '-minus');
+    var plusBtn = document.getElementById('rsvp-' + prefix + '-plus');
+
+    function clamp(n) {
+      n = parseInt(n, 10);
+      if (isNaN(n)) n = min;
+      return Math.min(STEPPER_MAX, Math.max(min, n));
+    }
+    function set(n) {
+      var v = clamp(n);
+      input.value = v;
+      minusBtn.disabled = v <= min;
+      plusBtn.disabled = v >= STEPPER_MAX;
+    }
+    minusBtn.addEventListener('click', function () { set(Number(input.value) - 1); });
+    plusBtn.addEventListener('click', function () { set(Number(input.value) + 1); });
+    set(input.value);
+
+    return set;
   }
-  function setGuests(n) {
-    var v = clampGuests(n);
-    guestsInput.value = v;
-    guestsMinus.disabled = v <= GUESTS_MIN;
-    guestsPlus.disabled = v >= GUESTS_MAX;
-  }
-  guestsMinus.addEventListener('click', function () { setGuests(guestsInput.value - 1); });
-  guestsPlus.addEventListener('click', function () { setGuests(Number(guestsInput.value) + 1); });
-  setGuests(guestsInput.value);
+
+  var setAdults = makeStepper('adults', 1);
+  var setChildren = makeStepper('children', 0);
 
   /* ----- Submit ----- */
   var submitBtn = form.querySelector('.modal__primary-btn');
@@ -305,7 +310,8 @@
     var curLang = document.documentElement.lang;
     var name = document.getElementById('rsvp-name').value.trim();
     var attending = form.querySelector('input[name="attending"]:checked').value;
-    var guests = attending === 'yes' ? String(clampGuests(guestsInput.value)) : '';
+    var adults = attending === 'yes' ? String(document.getElementById('rsvp-adults').value) : '';
+    var children = attending === 'yes' ? String(document.getElementById('rsvp-children').value) : '';
     var message = document.getElementById('rsvp-message').value.trim();
 
     if (!name) return;
@@ -317,7 +323,8 @@
       var payload = new FormData();
       payload.append('name', name);
       payload.append('attending', attending);
-      payload.append('guests', guests);
+      payload.append('adults', adults);
+      payload.append('children', children);
       payload.append('message', message);
       payload.append('lang', curLang);
       payload.append('submittedAt', new Date().toISOString());
@@ -333,11 +340,13 @@
       var bodyLines = curLang === 'en'
         ? ['Name: ' + name,
            'Attending: ' + (attending === 'yes' ? 'Yes' : 'No'),
-           attending === 'yes' ? 'Guests: ' + guests : null,
+           attending === 'yes' ? 'Adults: ' + adults : null,
+           attending === 'yes' ? 'Children: ' + children : null,
            message ? 'Message: ' + message : null]
         : ['Nombre: ' + name,
            'Asistirá: ' + (attending === 'yes' ? 'Sí' : 'No'),
-           attending === 'yes' ? 'Acompañantes: ' + guests : null,
+           attending === 'yes' ? 'Adultos: ' + adults : null,
+           attending === 'yes' ? 'Niños: ' + children : null,
            message ? 'Mensaje: ' + message : null];
       var body = bodyLines.filter(Boolean).join('\n');
       window.location.href = 'mailto:' + RSVP_EMAIL +

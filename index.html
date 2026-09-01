@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Daniel y Lizeth</title>
 <meta name="description" content="Nos casamos el 19 de septiembre de 2026 — acompáñanos.">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=20260901">
 </head>
 <body>
 <div class="paper-bg" aria-hidden="true"></div>
@@ -27,7 +27,6 @@
       <img class="envelope-btn__img" src="assets/img/envelope.png" alt="Daniel y Lizeth — 09.19.2026">
     </button>
   </div>
-  <p class="envelope-prompt" id="envelope-prompt">Oprima el sobre para ver la invitación</p>
 </section>
 
 <!-- ============================== SCREEN 2 — invitation ============================== -->
@@ -68,7 +67,7 @@
   </section>
 
   <!-- Blessing + parents + names -->
-  <section class="reveal">
+  <section class="blessing">
     <p class="verse" data-i18n="verseQuote">&ldquo;Coloca aquí tu versículo bíblico&rdquo;</p>
     <p class="verse-ref" data-i18n="verseRef">&mdash; Referencia</p>
 
@@ -113,9 +112,6 @@
     <div class="section__body reveal" style="--i:1">
       <h2 data-i18n="cenaHeading">Cena</h2>
       <p class="venue-name" data-i18n="cenaTBA">Por anunciarse</p>
-      <span class="map-link map-link--disabled" aria-hidden="true">
-        <img src="assets/img/map.png" alt="">
-      </span>
     </div>
   </section>
 
@@ -191,11 +187,21 @@
       </div>
 
       <div class="modal__field" id="rsvp-guests-field">
-        <span class="modal__label" id="rsvp-guests-label" data-i18n="labelGuests">Número de acompañantes (incluyéndote)</span>
-        <div class="stepper" role="group" aria-labelledby="rsvp-guests-label">
-          <button type="button" class="stepper__btn" id="rsvp-guests-minus" aria-label="−">&minus;</button>
-          <input class="stepper__value" id="rsvp-guests" name="guests" type="text" inputmode="numeric" readonly value="1" aria-live="polite">
-          <button type="button" class="stepper__btn" id="rsvp-guests-plus" aria-label="+">+</button>
+        <div class="modal__stepper-row">
+          <span class="modal__label" id="rsvp-adults-label" data-i18n="labelAdults">Adultos (incluyéndote)</span>
+          <div class="stepper" role="group" aria-labelledby="rsvp-adults-label">
+            <button type="button" class="stepper__btn" id="rsvp-adults-minus" aria-label="−">&minus;</button>
+            <input class="stepper__value" id="rsvp-adults" name="adults" type="text" inputmode="numeric" readonly value="1" aria-live="polite">
+            <button type="button" class="stepper__btn" id="rsvp-adults-plus" aria-label="+">+</button>
+          </div>
+        </div>
+        <div class="modal__stepper-row">
+          <span class="modal__label" id="rsvp-children-label" data-i18n="labelChildren">Niños</span>
+          <div class="stepper" role="group" aria-labelledby="rsvp-children-label">
+            <button type="button" class="stepper__btn" id="rsvp-children-minus" aria-label="−">&minus;</button>
+            <input class="stepper__value" id="rsvp-children" name="children" type="text" inputmode="numeric" readonly value="0" aria-live="polite">
+            <button type="button" class="stepper__btn" id="rsvp-children-plus" aria-label="+">+</button>
+          </div>
         </div>
       </div>
 
@@ -203,8 +209,6 @@
         <label class="modal__label" for="rsvp-message" data-i18n="labelMessage">Mensaje para los novios (opcional)</label>
         <textarea class="modal__textarea" id="rsvp-message" name="message" data-i18n-placeholder="placeholderMessage" placeholder="Escribe un mensaje..."></textarea>
       </div>
-
-      <p class="modal__note" data-i18n="requiredNote">Tu confirmación se envía directamente a los novios.</p>
 
       <button type="submit" class="modal__primary-btn" data-i18n="submitButton">Enviar Confirmación</button>
       <p class="modal__error" id="rsvp-error" role="alert" hidden></p>
@@ -217,7 +221,7 @@
   </div>
 </div>
 
-<script src="i18n.js"></script>
-<script src="script.js"></script>
+<script src="i18n.js?v=20260901"></script>
+<script src="script.js?v=20260901"></script>
 </body>
 </html>
