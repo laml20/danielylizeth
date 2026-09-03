@@ -382,6 +382,23 @@
     }
   });
 
+  /* ---------------- Scroll reveal ---------------- */
+  // .reveal elements fade/rise in when scrolled into view. The Intersection
+  // Observer is set up now; for elements inside #invitation-screen (display:none
+  // until opened) the callback fires once the screen is shown.
+  (function initReveal() {
+    var revealEls = document.querySelectorAll('.reveal');
+    if (!revealEls.length || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.15 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  })();
+
   // Deep link: arriving at index.html#invitacion by a real navigation (the
   // "back to the invitation" link on the story page, a bookmark, back/forward)
   // opens straight to the invitation view instead of the envelope landing.

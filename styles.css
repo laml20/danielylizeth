@@ -325,6 +325,7 @@ h1, h2, p { margin: 0; }
 }
 
 .hero {
+  position: relative;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -333,6 +334,27 @@ h1, h2, p { margin: 0; }
   gap: 10vh;
   padding: 96px 32px 48px;
   text-align: center;
+}
+
+/* Bobbing chevron near the bottom of the first screen — a hint to scroll.
+   Absolutely placed so it doesn't disturb the centred hero composition, and
+   it scrolls away with the hero once the guest starts scrolling. */
+.scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  color: var(--gold-700);
+  pointer-events: none;
+  animation: scroll-cue-bob 1.9s var(--ease-soft) infinite;
+}
+.scroll-cue svg { display: block; }
+@keyframes scroll-cue-bob {
+  0%, 100% { transform: translate(-50%, 0); opacity: 0.45; }
+  50%      { transform: translate(-50%, 7px); opacity: 0.9; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue { animation: none; transform: translateX(-50%); opacity: 0.6; }
 }
 
 /* --- Hero art: envelope + photo + card composition --- */
@@ -422,6 +444,31 @@ h1, h2, p { margin: 0; }
   font-size: clamp(8.5px, 2.7vw, 12px);
   color: var(--ink-800);
   line-height: 1.4;
+}
+
+/* --- Hero entrance: pieces rise + fade in, as if lifting out of the open
+   envelope. Runs when #invitation-screen gains .is-open (before that the
+   screen is display:none). `translate`/`scale` are animated as their own
+   properties so they compose with each layer's resting `transform` rotation. */
+@keyframes hero-emerge {
+  from { opacity: 0; translate: 0 52px; scale: 0.94; }
+  to   { opacity: 1; translate: 0 0;    scale: 1; }
+}
+@keyframes hero-settle {
+  from { opacity: 0; translate: 0 16px; }
+  to   { opacity: 1; translate: 0 0; }
+}
+#invitation-screen.is-open .hero__envelope { animation: hero-settle 0.6s var(--ease-soft) 0.05s both; }
+#invitation-screen.is-open .hero__photo    { animation: hero-emerge 0.85s var(--ease-soft) 0.18s both; }
+#invitation-screen.is-open .hero__card     { animation: hero-emerge 0.85s var(--ease-soft) 0.34s both; }
+#invitation-screen.is-open .hero__florals  { animation: hero-settle 0.7s var(--ease-soft) 0.52s both; }
+#invitation-screen.is-open .hero__flower   { animation: hero-settle 0.7s var(--ease-soft) 0.6s both; }
+@media (prefers-reduced-motion: reduce) {
+  #invitation-screen.is-open .hero__envelope,
+  #invitation-screen.is-open .hero__photo,
+  #invitation-screen.is-open .hero__card,
+  #invitation-screen.is-open .hero__florals,
+  #invitation-screen.is-open .hero__flower { animation: none; }
 }
 
 .countdown {
@@ -875,10 +922,22 @@ h1, h2, p { margin: 0; }
 }
 .story-page__divider { display: flex; justify-content: center; padding: 24px 0 4px; }
 .story-page__divider img { width: 140px; height: auto; }
-.story-page__photo {
+.story-figure {
   width: min(65%, 360px);
+  margin: 50px auto 44px;
+}
+.story-page__photo {
+  width: 100%;
   height: auto;
-  margin: 50px auto;
+  margin: 0;
+}
+.story-caption {
+  margin-top: 12px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: var(--ink-400);
 }
 .story-page p {
   font-family: var(--font-serif);
@@ -932,4 +991,45 @@ h1, h2, p { margin: 0; }
   overflow: hidden;
   clip: rect(0,0,0,0);
   white-space: nowrap;
+}
+
+/* ===================== Scroll reveal ===================== */
+/* .reveal elements fade + rise in as they scroll into view. Only armed once
+   the inline head script confirms IntersectionObserver support and sets
+   .reveal-ready on <html>, so with no JS the content simply shows. Uses the
+   `translate` property (not `transform`) so it composes with elements that
+   already carry a transform, e.g. .signature's optical shift. --i staggers
+   siblings that reveal together. */
+.reveal-ready .reveal {
+  opacity: 0;
+  translate: 0 18px;
+  transition:
+    opacity 0.7s var(--ease-soft),
+    translate 0.7s var(--ease-soft);
+  transition-delay: calc(var(--i, 0) * 80ms);
+}
+.reveal-ready .reveal.is-visible {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* Closing photo: instead of the default rise, it twists into place. The
+   surrounding .closing section still handles the fade, so opacity stays 1. */
+.reveal-ready .closing-photo.reveal {
+  opacity: 1;
+  translate: none;
+  rotate: -13deg;
+  scale: 0.9;
+  transition:
+    rotate 0.8s var(--ease-soft),
+    scale 0.8s var(--ease-soft);
+}
+.reveal-ready .closing-photo.reveal.is-visible {
+  rotate: 0deg;
+  scale: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready .reveal { opacity: 1; translate: none; transition: none; }
+  .reveal-ready .closing-photo.reveal { rotate: none; scale: none; }
 }

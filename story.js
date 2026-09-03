@@ -11,4 +11,17 @@
       window.i18n.applyLang(btn.getAttribute('data-lang-btn'));
     });
   });
+
+  /* Scroll reveal — .reveal elements fade/rise in when scrolled into view. */
+  var revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.15 });
+    revealEls.forEach(function (el) { io.observe(el); });
+  }
 })();

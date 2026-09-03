@@ -59,6 +59,13 @@
       storyPara2: 'Desde entonces, Daniel buscaba la manera de acercarse a Lizeth al final de clase, y empezó a acompañarla a almorzar. En las semanas siguientes, se seguían encontrando en eventos escolares y poco a poco se fueron conociendo mejor. Salieron a cenar varias veces en Rice Village, y finalmente, Daniel organizó un picnic en Hermann Park donde le pidió que fuera su novia. Ella dijo que sí.',
       storyPara3: 'Los dos siguieron involucrados en SHPE durante toda la carrera, llegando a ser presidenta (Lizeth) y tesorero (Daniel) en su último año. Se graduaron juntos en mayo de 2025, y después pasaron un año separados por más de mil millas de distancia, ya que Daniel regresó a vivir en Los Ángeles y Lizeth se mudó a Seattle por el trabajo.',
       storyPara4: 'Después de tantas videollamadas, citas virtuales y viajes de una ciudad a otra, Daniel le pidió matrimonio en el Parque Nacional Joshua Tree. Lizeth dijo que sí, otra vez :) . Una vez casados, la pareja vivirá en Seattle, donde Lizeth continuará su carrera como ingeniera de software y Daniel estudiará una maestría en ingeniería mecánica en la Universidad de Washington.',
+      // Pie de foto para cada imagen de "Nuestra Historia" — reemplázalos.
+      storyCap1: 'Cena en Hugo\'s',
+      storyCap2: 'Conferencia de SHPE 2023',
+      storyCap3: 'Graduación · Mayo 2025',
+      storyCap4: 'La propuesta · Joshua Tree',
+      storyCap5: 'Universidad de Washington · Seattle',
+
       langAria: 'Idioma',
 
       modalHeading: 'Confirmar Asistencia',
@@ -131,6 +138,13 @@
       storyPara2: 'From then on, Daniel would find his way to Lizeth\'s side as soon as history class let out and started walking her to lunch. Over the following weeks, they kept crossing paths at school events and slowly got to know each other better. They went out to dinner a few times in Rice Village, and eventually, Daniel planned a picnic in Hermann Park where he asked her to be his girlfriend. She said yes.',
       storyPara3: 'The two stayed involved in SHPE throughout college, rising to president (Lizeth) and treasurer (Daniel) by their senior year. They graduated together in May of 2025, and then spent the next year more than a thousand miles apart, as Daniel moved back home to Los Angeles and Lizeth headed to Seattle for work.',
       storyPara4: 'After countless FaceTime calls, virtual dates, and cross-country trips between the two cities, Daniel proposed in Joshua Tree National Park. Lizeth said yes, again :) . Once they\'re married, the couple will live in Seattle, where Lizeth will continue her career as a software engineer and Daniel will pursue a master\'s in mechanical engineering at the University of Washington.',
+      // Caption under each "Our Story" photo — replace these.
+      storyCap1: 'Date night at Hugo\'s',
+      storyCap2: 'SHPE Conference 2023',
+      storyCap3: 'Graduation · May 2025',
+      storyCap4: 'The proposal · Joshua Tree',
+      storyCap5: 'University of Washington · Seattle',
+
       langAria: 'Language',
 
       modalHeading: 'Confirm Attendance',
