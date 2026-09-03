@@ -149,20 +149,20 @@ h1, h2, p { margin: 0; }
   position: fixed;
   inset: 0;
   z-index: -1;
-  /* Everything is layered on this one fixed element and blended together with
-     background-blend-mode (a paint-time op on the element's own layers). No
-     mix-blend-mode / filter on a fixed, negative-z element — that combo made
-     the backdrop composite to white and smeared text while scrolling in
-     Safari. paper-grain.jpg is a seamless mirror tile, so `repeat` has no seam. */
-  background-color: var(--paper);
+  background: var(--paper);
   background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.45), transparent 55%),
-    radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.035), transparent 55%),
-    url("assets/img/paper-grain.jpg");
-  background-repeat: no-repeat, no-repeat, repeat;
-  background-position: center, center, center;
-  background-size: auto, auto, 460px auto;
-  background-blend-mode: normal, normal, multiply;
+    radial-gradient(ellipse at 20% 10%, rgba(255,255,255,0.5), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(0,0,0,0.03), transparent 55%);
+}
+.paper-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("assets/img/paper-texture-bg.jpg");
+  background-size: 480px auto;
+  background-repeat: repeat;
 }
 
 /* ===================== Header controls ===================== */
