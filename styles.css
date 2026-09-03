@@ -152,11 +152,18 @@ h1, h2, p { margin: 0; }
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.7;
+  opacity: 0.9;
   mix-blend-mode: multiply;
+  /* contrast() deepens the paper grain (it washes out when the small source
+     is scaled up); brightness() keeps the page from going dim. */
+  filter: contrast(1.5) brightness(1.05);
   background-image: url("assets/img/paper-texture-bg.jpg");
-  background-size: 480px auto;
-  background-repeat: repeat;
+  /* One copy scaled to fill the fixed viewport. The source isn't a seamless
+     tile (its bottom edge is darker), so `repeat` left a faint horizontal
+     seam ~709px down the screen. */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* ===================== Header controls ===================== */
