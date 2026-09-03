@@ -103,6 +103,12 @@
 /* ===================== Reset ===================== */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+/* Cream on <html> too: iOS Safari paints the overscroll / collapsing-toolbar
+   area from the root element, not <body>, so without this it flashes white. */
+html {
+  background: var(--paper);
+  color-scheme: light;
+}
 body {
   background: var(--paper);
   color: var(--ink-800);
@@ -143,27 +149,20 @@ h1, h2, p { margin: 0; }
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: var(--paper);
+  /* Everything is layered on this one fixed element and blended together with
+     background-blend-mode (a paint-time op on the element's own layers). No
+     mix-blend-mode / filter on a fixed, negative-z element — that combo made
+     the backdrop composite to white and smeared text while scrolling in
+     Safari. paper-grain.jpg is a seamless mirror tile, so `repeat` has no seam. */
+  background-color: var(--paper);
   background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(255,255,255,0.5), transparent 55%),
-    radial-gradient(ellipse at 80% 90%, rgba(0,0,0,0.03), transparent 55%);
-}
-.paper-bg::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.9;
-  mix-blend-mode: multiply;
-  /* contrast() deepens the paper grain (it washes out when the small source
-     is scaled up); brightness() keeps the page from going dim. */
-  filter: contrast(1.5) brightness(1.05);
-  background-image: url("assets/img/paper-texture-bg.jpg");
-  /* One copy scaled to fill the fixed viewport. The source isn't a seamless
-     tile (its bottom edge is darker), so `repeat` left a faint horizontal
-     seam ~709px down the screen. */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.45), transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(0, 0, 0, 0.035), transparent 55%),
+    url("assets/img/paper-grain.jpg");
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-position: center, center, center;
+  background-size: auto, auto, 460px auto;
+  background-blend-mode: normal, normal, multiply;
 }
 
 /* ===================== Header controls ===================== */
