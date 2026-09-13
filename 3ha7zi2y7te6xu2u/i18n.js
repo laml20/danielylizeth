@@ -38,7 +38,8 @@
       mapButton: 'Ver ubicación',
 
       cenaHeading: 'Cena',
-      cenaTBA: 'Por anunciarse',
+      cenaAddress: '1859 West 79th Street<br>Los Angeles, CA 90047',
+      cenaTime: '6:00 PM',
 
       vestimentaHeading: 'Vestimenta',
       vestimentaBody: 'Los invitamos a vestir tonos de verde, vino, café, rosa, o colores similares, el día de nuestra boda.',
@@ -117,7 +118,8 @@
       mapButton: 'View location',
 
       cenaHeading: 'Reception',
-      cenaTBA: 'To be announced',
+      cenaAddress: '1859 West 79th Street<br>Los Angeles, CA 90047',
+      cenaTime: '6:00 PM',
 
       vestimentaHeading: 'Attire',
       vestimentaBody: 'We invite you to wear shades of green, burgundy, brown, pink, or similar on the day of the wedding.',
